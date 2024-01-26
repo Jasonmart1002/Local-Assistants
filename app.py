@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, session, jsonify
+from flask import Flask, render_template, request, session, redirect, url_for
 from openai import OpenAI
+from werkzeug.security import generate_password_hash, check_password_hash
 from markdown2 import markdown
 from markupsafe import escape
 import time
@@ -16,11 +17,19 @@ if os.environ.get("SECRET_KEY") is None:
     print("Please set your SECRET_KEY environment variable and try again.")
     sys.exit(1)
 
-
 # Instantiate OpenAI client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 ASSISTANT_OPTIONS = [{'id': asst.id, 'name': asst.name} for asst in client.beta.assistants.list().data]
 ASSISTANT_MAP = {item['id']: item['name'] for item in ASSISTANT_OPTIONS}
+
+
+# Predefined user dictionary
+users = {
+    'user1': generate_password_hash('password1'),
+    'user2': generate_password_hash('password2'),
+    # Add more users as needed
+}
+
 
 app = Flask(__name__)
 # Check Flask-Session documentation for proper secret key settings
@@ -31,24 +40,49 @@ Session(app)
 # Set the default selected assistant ID in session on app startup
 app.config['DEFAULT_ASSISTANT_ID'] = ASSISTANT_OPTIONS[0]['id']
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user_hash = users.get(username)
+        if user_hash and check_password_hash(user_hash, password):
+            session['username'] = username
+            return redirect(url_for('index'))
+        else:
+            return 'Invalid username or password!'
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
 @app.route('/assistant_options', methods=['POST', 'GET'])
 def assistant_options():
     try:
         default_assistant_id = app.config.get('DEFAULT_ASSISTANT_ID')
         if request.method == 'GET':
-            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS, selected_assistant_id=session.get('selected_assistant_id', default_assistant_id))
+            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS,
+                                           selected_assistant_id=session.get('selected_assistant_id',
+                                                                             default_assistant_id))
             return options_html
-        
+
         if request.method == 'POST':
             agent_id = request.form.get('id', default_assistant_id)
             if agent_id not in ASSISTANT_MAP:
                 return jsonify({'status': 'error', 'message': f"Invalid assistant ID {agent_id}"}), 400
-            
+
             session['selected_assistant_id'] = agent_id
-            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS, selected_assistant_id=session.get('selected_assistant_id', default_assistant_id))
+            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS,
+                                           selected_assistant_id=session.get('selected_assistant_id',
+                                                                             default_assistant_id))
             print(f"We are now using: '{ASSISTANT_MAP[agent_id]}'")
             return options_html
-        
+
     except Exception as e:
         tbe = traceback.format_exc()
         print(f"Exception during assistant selection: `{tbe}`")
@@ -57,6 +91,8 @@ def assistant_options():
 
 @app.route('/')
 def index():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     session['thread_id'] = None  # Initialize the thread_id in session
     if 'selected_assistant_id' not in session:
         session['selected_assistant_id'] = app.config['DEFAULT_ASSISTANT_ID']
@@ -86,12 +122,12 @@ def submit():
 
     # Format and sanitize AI's response
     ai_reply_html = markdown(ai_reply, extras=["tables", "fenced-code-blocks", "spoiler", "strike"])
-    
+
     # Add copy buttons to AI's response
     ai_reply_html = add_copy_buttons_to_code(ai_reply_html)
 
     # Escaping user_message for security reasons
-    #user_message = escape(user_message)
+    # user_message = escape(user_message)
     user_message = markdown(user_message, extras=["tables", "fenced-code-blocks", "spoiler", "strike"])
     user_message = add_copy_buttons_to_code(user_message)
 
@@ -114,7 +150,7 @@ def clear():
 def add_copy_buttons_to_code(html_content):
     # Create a BeautifulSoup object to parse HTML
     soup = BeautifulSoup(html_content, 'html.parser')
-    
+
     # Find all code blocks and update them
     for pre in soup.find_all('pre'):
         copy_button = soup.new_tag('button', **{
@@ -124,7 +160,7 @@ def add_copy_buttons_to_code(html_content):
         })
         copy_button.string = 'Copy'
         pre.insert(0, copy_button)
-    
+
     return str(soup)
 
 

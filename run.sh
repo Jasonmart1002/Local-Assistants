@@ -23,7 +23,7 @@ if [ $FIRST_RUN == true ]; then
 fi
 
 # Step 4: Export environment variable
-export OPENAI_API_KEY=sk-exxxxxxxxxxxxxxxxxxxx
+export OPENAI_API_KEY=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
 export SECRET_KEY=something-secret-123
 
 # Step 5: Message about openai migrate
