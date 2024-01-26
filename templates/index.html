@@ -12,7 +12,6 @@
         <img src="{{ url_for('static', filename='img/assistant_icon.png') }}" alt="Assistant Icon">
         <h1>Assistants</h1>
     </div>
-    <!-- Wrap the dropdown and the clear button in a container -->
     <div id="top-controls">
         <button hx-post="/clear" id="clearButton">🧽 Clear Chat</button>
         <div id="assistant-select-wrapper" hx-get="/assistant_options" hx-trigger="load">
@@ -20,12 +19,23 @@
         </div>
     </div>
     <div id="chat">
-        <!-- Chat messages will go here -->
+        {% for entry in conversation_history %}
+            <div class="user-message">{{ entry.user }}</div>
+            <div class="ai-message">{{ entry.ai }}</div>
+        {% endfor %}
     </div>
-    <form hx-post="/submit" hx-target="#chat" hx-swap="beforeend" hx-push-url="false" id="chat-form" method="post">
-        <textarea name="message" autocomplete="off" placeholder="Type your message..." required></textarea>
+    <div id="bottom-controls">
+        <form hx-post="/submit" hx-target="#chat" hx-swap="beforeend" hx-push-url="false" id="chat-form" method="post">
+            <textarea name="message" autocomplete="off" placeholder="Type your message..." required></textarea>
+            <div id="button-container">
         <button type="submit" id="sendButton">Send</button>
-    </form>
+        <div id="logout-container">
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </div>
+</form>
+
+    </div>
     
     <script>
         document.body.addEventListener('htmx:afterSwap', function(evt) {

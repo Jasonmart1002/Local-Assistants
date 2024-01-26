@@ -1,20 +1,15 @@
 #!/bin/bash
 
-# Define the name of the virtual environment
-VENV_NAME="local-agents-venv"
+# Define the name of the Conda environment
+CONDA_ENV_NAME="Local-Assistants"
 
-# Step 1: Check for the virtual environment
-if [ ! -d "$VENV_NAME" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv "$VENV_NAME"
-    FIRST_RUN=true
-else
-    echo "Virtual environment already exists."
-    FIRST_RUN=false
-fi
+# Step 1: Activate the Conda environment
+echo "Activating Conda environment..."
+conda activate "$CONDA_ENV_NAME"
 
-# Step 2: Activate the virtual environment
-source "$VENV_NAME/bin/activate"
+# Step 2: Export environment variable
+export OPENAI_API_KEY=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
+export SECRET_KEY=something-secret-123
 
 # Step 3: Install requirements
 if [ $FIRST_RUN == true ]; then
@@ -23,7 +18,7 @@ if [ $FIRST_RUN == true ]; then
 fi
 
 # Step 4: Export environment variable
-export OPENAI_API_KEY=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
+export OPENAI_API_KEY=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
 export SECRET_KEY=something-secret-123
 
 # Step 5: Message about openai migrate

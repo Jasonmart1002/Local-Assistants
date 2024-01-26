@@ -1,7 +1,7 @@
 body, html {
     height: 100%;
     margin: 0;
-    padding: 0;
+    padding: 10px;
     font-family: 'Roboto', Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -282,5 +282,108 @@ code {
 
     #chat-form button {
         margin-right: 10px;
+    }
+}
+
+#bottom-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+#logout-container {
+    /* Align logout button to the left */
+    margin-left: 10px;
+}
+
+.logout-button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
+#chat-form {
+    /* Align chat form to the right */
+    margin-right: 10px;
+}
+
+.login-form {
+    width: 300px;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+    padding: 0; /* Remove padding to allow true centering */
+    margin: 0 auto; /* Center horizontally */
+}
+
+/* Ensure inputs and buttons are not wider than their container */
+.login-form input,
+.login-form button {
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Adjustments for mobile screens */
+@media (max-width: 600px) {
+    /* Ensure there's no horizontal overflow on smaller screens */
+    body, html {
+        padding: 0;
+    }
+
+    /* Adjust form and elements margins and paddings */
+    .login-container {
+        margin: 0 20px; /* Add horizontal padding */
+    }
+
+    .login-form {
+        width: auto; /* Allow form to adjust to padding */
+    }
+
+    .login-form input,
+    .login-form button {
+        width: calc(100% - 40px); /* Adjust for padding */
+    }
+
+    #chat-form {
+        display: flex;
+        flex-direction: column;
+        margin: 0 10px 20px 10px; /* Aligned horizontal margins with #chat, increased bottom margin */
+        width: calc(100% - 20px); /* Account for padding and maintain consistent width with chat box */
+    }
+
+    #chat-form textarea {
+        flex-grow: 1;
+        padding: 12px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background: #262626;
+        color: white;
+        font-size: 16px;
+        margin-bottom: 10px; /* Space between textarea and button */
+        resize: none; /* Disable resizing to maintain layout */
+        line-height: 1.5;
+        overflow-y: auto;
+        width: 90%;
+    }
+
+    #button-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #chat-form button {
+        padding: 12px 24px;
     }
 }

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from openai import OpenAI
 from werkzeug.security import generate_password_hash, check_password_hash
 from markdown2 import markdown
@@ -93,10 +93,16 @@ def assistant_options():
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
-    session['thread_id'] = None  # Initialize the thread_id in session
-    if 'selected_assistant_id' not in session:
-        session['selected_assistant_id'] = app.config['DEFAULT_ASSISTANT_ID']
-    return render_template('index.html')
+
+    # Ensure thread_id is set, but do not modify conversation history here
+    if 'thread_id' not in session:
+        session['thread_id'] = None  # Or initialize a new thread if necessary
+
+    # Pass only the existing conversation history for the selected assistant to the template
+    selected_assistant_id = session.get('selected_assistant_id', app.config['DEFAULT_ASSISTANT_ID'])
+    conversation_history = session.get('conversation', {}).get(selected_assistant_id, [])
+
+    return render_template('index.html', conversation_history=conversation_history, ASSISTANT_MAP=ASSISTANT_MAP)
 
 
 @app.route('/submit', methods=['POST'])
@@ -105,6 +111,7 @@ def submit():
     user_message = request.form['message'].strip()
     thread_id = session.get('thread_id')
     selected_assistant_id = session.get('selected_assistant_id', default_assistant_id)
+    ai_reply = ""  # Initialize ai_reply to an empty string
 
     if not thread_id:
         thread = client.beta.threads.create()
@@ -116,34 +123,37 @@ def submit():
     run = wait_on_run(run, thread)
     messages = get_response(thread)
 
+    if messages:
+        ai_reply = messages[-1].content[0].text.value  # Assign value to ai_reply
+
+        # Ensure session['conversation'] is a dictionary
+        if 'conversation' not in session or not isinstance(session['conversation'], dict):
+            session['conversation'] = {}
+
+        # Ensure the selected assistant has an entry in the conversation history
+        if selected_assistant_id not in session['conversation']:
+            session['conversation'][selected_assistant_id] = []
+
+        # Append conversation to the assistant's history
+        session['conversation'][selected_assistant_id].append({'user': user_message, 'ai': ai_reply})
+
     # Format the AI's latest response for display
-    ai_reply = messages[-1].content[0].text.value if messages else ""
     assistant_name = ASSISTANT_MAP.get(selected_assistant_id, "Unknown Assistant")
-
-    # Format and sanitize AI's response
     ai_reply_html = markdown(ai_reply, extras=["tables", "fenced-code-blocks", "spoiler", "strike"])
-
-    # Add copy buttons to AI's response
     ai_reply_html = add_copy_buttons_to_code(ai_reply_html)
+    user_message_html = markdown(user_message, extras=["tables", "fenced-code-blocks", "spoiler", "strike"])
+    user_message_html = add_copy_buttons_to_code(user_message_html)
 
-    # Escaping user_message for security reasons
-    # user_message = escape(user_message)
-    user_message = markdown(user_message, extras=["tables", "fenced-code-blocks", "spoiler", "strike"])
-    user_message = add_copy_buttons_to_code(user_message)
-
-    chat_html = f'<div class="user-message">{user_message}</div>'
+    chat_html = f'<div class="user-message">{user_message_html}</div>'
     chat_html += f'<div class="ai-message"><div class="ai-agent-name">{assistant_name}</div> {ai_reply_html}</div>'
     return chat_html
 
 
 @app.route('/clear', methods=['POST'])
 def clear():
-    # Clear the current thread ID from the session
-    session.pop('thread_id', None)
-    # Create a new thread to start fresh
-    thread = client.beta.threads.create()
-    session['thread_id'] = thread.id
-    # The response doesn't need to change since HTMX will handle the reloading
+    selected_assistant_id = session.get('selected_assistant_id', app.config['DEFAULT_ASSISTANT_ID'])
+    if 'conversation' in session and selected_assistant_id in session['conversation']:
+        session['conversation'][selected_assistant_id] = []
     return '', 204
 
 
