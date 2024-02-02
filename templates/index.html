@@ -14,9 +14,8 @@
     </div>
     <div id="top-controls">
         <button hx-post="/clear" id="clearButton">🧽 Clear Chat</button>
-        <div id="assistant-select-wrapper" hx-get="/assistant_options" hx-trigger="load">
-            <!-- The select dropdown will be loaded here -->
-        </div>
+        <!-- Add a new button for going back to assistant selection -->
+        <a href="{{ url_for('assistant_options') }}" class="button">Select Another Assistant</a>
     </div>
     <div id="chat">
         {% for entry in conversation_history %}
@@ -29,9 +28,7 @@
             <textarea name="message" autocomplete="off" placeholder="Type your message..." required></textarea>
             <div id="button-container">
         <button type="submit" id="sendButton">Send</button>
-        <div id="logout-container">
             <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-        </div>
     </div>
 </form>
 

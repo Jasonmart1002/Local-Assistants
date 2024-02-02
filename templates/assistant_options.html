@@ -1,5 +1,23 @@
-<select id="assistant-dropdown" hx-post="/assistant_options" hx-trigger="change" name="id" hx-target="#assistant-select-wrapper">
-    {% for assistant in assistants %}
-        <option value="{{ assistant.id }}" {% if assistant.id == selected_assistant_id %} selected {% endif %}>{{ assistant.name }}</option>
-    {% endfor %}
-</select>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensure proper mobile scaling -->
+</head>
+<body>
+    <h1>Select an Assistant</h1>
+    <div class="assistant-container">
+        {% for assistant in assistants %}
+            <form action="{{ url_for('assistant_options') }}" method="post" class="assistant-card">
+                <input type="hidden" name="id" value="{{ assistant.id }}">
+                <!-- Card with black text and a logo in the middle -->
+                <div class="assistant-block" onclick="this.parentNode.submit();">
+                    <div class="assistant-logo"><img src="{{ url_for('static', filename='img/assistant_icon.png') }}" alt="Assistant Icon"></div>
+                    <div class="assistant-name">{{ assistant.name }}</div>
+                </div>
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>

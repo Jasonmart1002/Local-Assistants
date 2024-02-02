@@ -7,7 +7,11 @@ import time
 from flask_session import Session  # Make sure to install Flask-Session
 from bs4 import BeautifulSoup
 import traceback
+from dotenv import load_dotenv
 import os, sys
+
+# Load environment variables from .env file
+load_dotenv()
 
 if os.environ.get("OPENAI_API_KEY") is None:
     print("Please set your OPENAI_API_KEY environment variable and try again.")
@@ -23,6 +27,13 @@ ASSISTANT_OPTIONS = [{'id': asst.id, 'name': asst.name} for asst in client.beta.
 ASSISTANT_MAP = {item['id']: item['name'] for item in ASSISTANT_OPTIONS}
 
 
+# User-specific assistant access
+USER_ASSISTANT_ACCESS = {
+    'user1': ['asst_wGwKpr1X9rTUixjM47mHknvu', 'asst_Zt6puzNDAL7XeEe2vRLGWTDp'],
+    'user2': ['asst_wGwKpr1X9rTUixjM47mHknvu', 'asst_Zt6puzNDAL7XeEe2vRLGWTDp'],
+}
+
+
 # Predefined user dictionary
 users = {
     'user1': generate_password_hash('password1'),
@@ -34,7 +45,7 @@ users = {
 app = Flask(__name__)
 # Check Flask-Session documentation for proper secret key settings
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_TYPE']  = 'filesystem'
 Session(app)
 
 # Set the default selected assistant ID in session on app startup
@@ -49,7 +60,7 @@ def login():
         user_hash = users.get(username)
         if user_hash and check_password_hash(user_hash, password):
             session['username'] = username
-            return redirect(url_for('index'))
+            return redirect(url_for('assistant_options'))  # Redirect to assistant selection
         else:
             return 'Invalid username or password!'
     return render_template('login.html')
@@ -61,15 +72,18 @@ def logout():
     return redirect(url_for('login'))
 
 
+
 @app.route('/assistant_options', methods=['POST', 'GET'])
 def assistant_options():
     try:
         default_assistant_id = app.config.get('DEFAULT_ASSISTANT_ID')
+        username = session.get('username')
+
+        available_assistants = [assistant for assistant in ASSISTANT_OPTIONS
+                                if assistant['id'] in USER_ASSISTANT_ACCESS.get(username, [])]
+
         if request.method == 'GET':
-            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS,
-                                           selected_assistant_id=session.get('selected_assistant_id',
-                                                                             default_assistant_id))
-            return options_html
+            return render_template('assistant_options.html', assistants=available_assistants)
 
         if request.method == 'POST':
             agent_id = request.form.get('id', default_assistant_id)
@@ -77,16 +91,13 @@ def assistant_options():
                 return jsonify({'status': 'error', 'message': f"Invalid assistant ID {agent_id}"}), 400
 
             session['selected_assistant_id'] = agent_id
-            options_html = render_template('assistant_options.html', assistants=ASSISTANT_OPTIONS,
-                                           selected_assistant_id=session.get('selected_assistant_id',
-                                                                             default_assistant_id))
-            print(f"We are now using: '{ASSISTANT_MAP[agent_id]}'")
-            return options_html
+            return redirect(url_for('index'))  # Redirect to chat page
 
     except Exception as e:
-        tbe = traceback.format_exc()
-        print(f"Exception during assistant selection: `{tbe}`")
+        print(f"Exception during assistant selection: {e}")
         return jsonify({'status': 'error', 'message': 'invalid action'}), 500
+
+
 
 
 @app.route('/')
