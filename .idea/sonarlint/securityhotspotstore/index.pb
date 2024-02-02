@@ -7,3 +7,9 @@
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 6
 run.sh,3/2/324fcb49f1cf313ebdd7cbda6a71b73727ddd94d
+D
+templates/login.html,f/f/ffdb36cd67c5e5e09ba8e92b13a1dc029c7c4627
+D
+static/css/style.css,3/6/36e68d0961b94e1750624bc9e2f66c060d73b91b
+D
+templates/index.html,f/6/f69b8ce2e31684ae06f1b3e84821e07e3dfddb2f

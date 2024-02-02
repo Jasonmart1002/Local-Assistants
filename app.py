@@ -27,10 +27,16 @@ ASSISTANT_OPTIONS = [{'id': asst.id, 'name': asst.name} for asst in client.beta.
 ASSISTANT_MAP = {item['id']: item['name'] for item in ASSISTANT_OPTIONS}
 
 
+# # User-specific assistant access
+# USER_ASSISTANT_ACCESS = {
+#     'user1': ['asst_wGwKpr1X9rTUixjM47mHknvu'],
+#     'user2': ['asst_wGwKpr1X9rTUixjM47mHknvu'],
+# }
+
 # User-specific assistant access
 USER_ASSISTANT_ACCESS = {
-    'user1': ['asst_wGwKpr1X9rTUixjM47mHknvu', 'asst_Zt6puzNDAL7XeEe2vRLGWTDp'],
-    'user2': ['asst_wGwKpr1X9rTUixjM47mHknvu', 'asst_Zt6puzNDAL7XeEe2vRLGWTDp'],
+    'user1': ['asst_g5SD5u5MtuC6B92EFXWmCEmL', 'asst_BFHpSR2eZ0jB5zc7KvlWtPOp'],
+    'user2': ['asst_g5SD5u5MtuC6B92EFXWmCEmL', 'asst_BFHpSR2eZ0jB5zc7KvlWtPOp'],
 }
 
 
@@ -122,6 +128,10 @@ def submit():
     user_message = request.form['message'].strip()
     thread_id = session.get('thread_id')
     selected_assistant_id = session.get('selected_assistant_id', default_assistant_id)
+
+    # Print the selected assistant ID for debugging
+    print(f"Selected Assistant ID: {selected_assistant_id}")
+
     ai_reply = ""  # Initialize ai_reply to an empty string
 
     if not thread_id:
@@ -162,10 +172,21 @@ def submit():
 
 @app.route('/clear', methods=['POST'])
 def clear():
+    # Clear the conversation history for the current assistant
     selected_assistant_id = session.get('selected_assistant_id', app.config['DEFAULT_ASSISTANT_ID'])
     if 'conversation' in session and selected_assistant_id in session['conversation']:
         session['conversation'][selected_assistant_id] = []
+
+    # Create a new thread for future messages
+    try:
+        new_thread = client.beta.threads.create()  # Assuming the client is your OpenAI API client
+        session['thread_id'] = new_thread.id  # Update the thread ID in the session
+    except Exception as e:
+        print(f"Error creating a new thread: {e}")
+        # Handle error appropriately
+
     return '', 204
+
 
 
 def add_copy_buttons_to_code(html_content):

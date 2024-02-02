@@ -1,13 +1,13 @@
 body, html {
     height: 100%;
     margin: 0;
-    padding: 10px;
+    padding: 0;
     font-family: 'Roboto', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
     background: #121212;
     color: #ffffff;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 h1 {
@@ -265,31 +265,12 @@ code {
     animation: pulseBorder 2s infinite;
 }
 
-@media (max-width: 600px) {
-    h1, #title-container, #top-controls, #chat, #chat-form {
-        margin: 20px 10px; /* Consistent vertical margin for all elements */
-        width: calc(100% - 20px); /* Adjust width for small screens */
-    }
-
-    #top-controls {
-        flex-direction: column;
-    }
-
-    #clearButton, #assistant-select-wrapper, #assistant-dropdown {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    #chat-form button {
-        margin-right: 10px;
-    }
-}
 
 #bottom-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
 }
 
 #logout-container {
@@ -393,6 +374,27 @@ code {
     #chat-form button {
         padding: 12px 24px;
     }
+    h1, #title-container, #top-controls, #chat, #chat-form {
+        margin: 10px 10px; /* Consistent vertical margin for all elements */
+        width: calc(100% - 20px); /* Adjust width for small screens */
+    }
+
+    #top-controls {
+        flex-direction: column;
+    }
+
+    #clearButton, #assistant-select-wrapper, #assistant-dropdown {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #chat-form button {
+        margin-right: 10px;
+    }
+    #chat {
+        height: 60vh; /* Use viewport height (vh) to make the chat taller */
+        /* You can adjust the value to find the height that works best for your design */
+    }
 }
 
 #top-controls .button {
@@ -411,54 +413,51 @@ code {
 }
 
 
-/* General card container styling */
+/* General improvements for readability and consistency */
+h1, .assistant-name {
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Responsive card container */
 .assistant-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
-    gap: 20px; /* Adjust the space between cards */
     padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
 }
 
-/* Card styling */
+/* Card styling for a clean and modern look */
 .assistant-card {
-    border-radius: 8px; /* Rounded corners like the example */
-    overflow: hidden; /* Ensures content does not overflow the card edges */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    cursor: pointer;
-    background: #fff; /* White background for the card */
-    text-align: center; /* Center text and content */
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center; /* Center children horizontally */
+    background-color: #2e2e2e;
+    color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 300px; /* Adjusted height */
+    padding: 20px; /* Add padding to create space inside the card */
+    box-sizing: border-box; /* Include padding in the box model */
 }
 
-/* Logo placeholder styling */
-.assistant-logo {
-    padding: 16px; /* Space around the logo */
-    /* Insert a background image for the logo if you have one, or use a text logo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* Set a fixed height or leave as is to adjust based on content */
+
+.assistant-card:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
-/* Card name styling */
+.assistant-logo img {
+    max-width: 100%; /* Ensure logo fits within the padding */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Space between logo and name */
+}
+
 .assistant-name {
-    padding: 16px;
-    font-size: 25px; /* Adjust font size as needed */
-    color: #000; /* Black text */
+    font-size: 20px;
     font-weight: bold;
+    text-align: center;
+    margin-top: 20px; /* Space above the assistant name if needed */
 }
 
-/* Adjustments for mobile view */
-@media (max-width: 768px) { /* Adjust breakpoint as needed for mobile */
-    .assistant-container {
-        grid-template-columns: 1fr; /* 1 column on mobile */
-    }
-}
-
-/* Optional: Add transitions for form click effect */
-.assistant-card {
-    transition: transform 0.2s ease-in-out;
-}
-
-.assistant-card:active {
-    transform: scale(0.98); /* Slight scale down when clicked */
-}
