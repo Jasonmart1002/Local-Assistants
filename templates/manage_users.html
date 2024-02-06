@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Manage Users</h1>
+        <div class="list-container">
+            <ul>
+                {% for user in users %}
+                    <li>ID: {{ user.id }}, Username: {{ user.username }}, Admin: {{ user.is_admin }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2>Add New User</h2>
+        <form action="/admin/manage_users/add" method="post" class="form-container">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br>
+            <label for="is_admin">Admin:</label>
+            <input type="checkbox" id="is_admin" name="is_admin"><br>
+            <input type="submit" value="Add" class="form-button">
+        </form>
+
+        <h2>Remove User</h2>
+        <form action="/admin/manage_users/remove" method="post" class="form-container">
+            <label for="user_id">User ID:</label><br>
+            <input type="text" id="user_id" name="user_id" required><br>
+            <input type="submit" value="Remove" class="form-button">
+        </form>
+    </div>
+</body>
+</html>

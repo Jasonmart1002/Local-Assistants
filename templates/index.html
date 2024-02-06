@@ -25,7 +25,7 @@
     </div>
     <div id="bottom-controls">
         <form hx-post="/submit" hx-target="#chat" hx-swap="beforeend" hx-push-url="false" id="chat-form" method="post">
-            <textarea name="message" autocomplete="off" placeholder="Type your message..." required></textarea>
+                <textarea name="message" autocomplete="off" placeholder="Type your message..." required></textarea>
             <div id="button-container">
         <button type="submit" id="sendButton">Send</button>
             <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
@@ -37,10 +37,10 @@
     <script>
         document.body.addEventListener('htmx:afterSwap', function(evt) {
             if (evt.detail.target.id === 'chat') {
-                var chatContainer = document.getElementById('chat');
+                const chatContainer = document.getElementById('chat');
                 chatContainer.scrollTop = chatContainer.scrollHeight;
-                var sendButton = document.getElementById('sendButton');
-                var textarea = document.querySelector('#chat-form textarea');
+                const sendButton = document.getElementById('sendButton');
+                const textarea = document.querySelector('#chat-form textarea');
                 sendButton.disabled = false;
                 textarea.disabled = false;
                 sendButton.textContent = 'Send';
@@ -50,8 +50,8 @@
         });
     
         document.getElementById('chat-form').addEventListener('htmx:beforeRequest', function() {
-            var sendButton = document.getElementById('sendButton');
-            var textarea = document.querySelector('#chat-form textarea');
+            const sendButton = document.getElementById('sendButton');
+            const textarea = document.querySelector('#chat-form textarea');
             // Disable the textarea and button before sending the request
             sendButton.disabled = true;
             textarea.disabled = true;
@@ -61,10 +61,10 @@
 
         function copyCode(button) {
             // Get the text content of the code element inside the same pre element as the button
-            var code = button.parentElement.querySelector('code').innerText;
-            
+            const code = button.parentElement.querySelector('code').innerText;
+
             // Create a temporary textarea element to copy from
-            var textarea = document.createElement('textarea');
+            const textarea = document.createElement('textarea');
             textarea.value = code;
             document.body.appendChild(textarea);
             textarea.select();
@@ -86,9 +86,9 @@
                     htmx.trigger(this.form, 'submit', {shiftKey: true});
                 } else {
                     // When only Enter is pressed, insert a newline at the cursor position
-                    var cursorPos = this.selectionStart;
-                    var textBefore = this.value.substring(0, cursorPos);
-                    var textAfter = this.value.substring(cursorPos);
+                    const cursorPos = this.selectionStart;
+                    const textBefore = this.value.substring(0, cursorPos);
+                    const textAfter = this.value.substring(cursorPos);
                     this.value = textBefore + "\n" + textAfter;
                     
                     // Move the cursor to right after the inserted newline
@@ -100,7 +100,7 @@
         document.body.addEventListener('htmx:afterRequest', function(evt) {
             if (evt.detail.xhr.responseURL.includes("/submit") && !evt.detail.xhr.shiftKey) {
                 // If the request was a form submission (not just a newline insert), clear the textarea
-                var textarea = document.querySelector('#chat-form textarea');
+                const textarea = document.querySelector('#chat-form textarea');
                 textarea.value = '';
             }
         });

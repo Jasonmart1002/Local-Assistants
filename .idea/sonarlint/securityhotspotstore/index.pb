@@ -13,3 +13,8 @@ D
 static/css/style.css,3/6/36e68d0961b94e1750624bc9e2f66c060d73b91b
 D
 templates/index.html,f/6/f69b8ce2e31684ae06f1b3e84821e07e3dfddb2f
+P
+ templates/assistant_options.html,0/4/04677a74624522d8364d9eb53df520ea582a20a6
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome to Your Dashboard</h1>
+        <!-- Button to the Assistant Options page -->
+        <form action="{{ url_for('assistant_options') }}" method="get">
+            <button type="submit" class="navigation-button">
+                <img src="{{ url_for('static', filename='img/assistant_icon.png') }}" alt="Assistant Options Icon" class="button-logo">
+                <span>Assistant Options</span>
+            </button>
+        </form>
+    </div>
+</body>
+</html>

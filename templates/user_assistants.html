@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Assistants</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>User Assistants</h1>
+        <div class="list-container">
+            <ul>
+                {% for user_assistant in user_assistants %}
+                    <li>ID: {{ user_assistant.id }} | Username: {{ user_assistant.user_id }} | Assistant: {{ user_assistant.assistant_id }} ({{ user_assistant.assistant_name }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2>Add User Assistant</h2>
+        <form action="/admin/user_assistants/add" method="post" class="form-container">
+            <label for="user_id">Username:</label><br>
+            <input type="text" id="user_id" name="user_id"><br>
+            <label for="assistant_id">Assistant ID:</label><br>
+            <input type="text" id="assistant_id" name="assistant_id"><br>
+            <input type="submit" value="Add" class="form-button">
+        </form>
+
+        <h2>Remove User Assistant</h2>
+        <form action="/admin/user_assistants/remove" method="post" class="form-container">
+            <label for="user_assistant_id">User ID:</label><br>
+            <input type="text" id="user_assistant_id" name="user_assistant_id"><br>
+            <input type="submit" value="Remove" class="form-button">
+        </form>
+    </div>
+</body>
+</html>

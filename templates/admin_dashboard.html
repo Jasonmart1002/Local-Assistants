@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <div class="navigation-container">
+            <!-- Convert navigation to use buttons or styled links for a consistent look -->
+            <a href="/admin/manage_users" class="navigation-button">Manage Users</a>
+            <a href="/admin/user_assistants" class="navigation-button">Manage User Assistants</a>
+            <a href="/logout" class="navigation-button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Selection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome, Admin</h1>
+        <p>Please select the dashboard you wish to access:</p>
+        <div>
+            <!-- Using button elements for consistent styling with the dashboard page -->
+            <a href="/admin/dashboard" class="navigation-button">Admin Dashboard</a>
+            <a href="/dashboard" class="navigation-button">Regular Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

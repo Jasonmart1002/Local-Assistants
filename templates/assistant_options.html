@@ -3,7 +3,7 @@
 <head>
     <title>Select Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensure proper mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper mobile scaling -->
 </head>
 <body>
     <h1>Select an Assistant</h1>
@@ -11,13 +11,12 @@
         {% for assistant in assistants %}
             <form action="{{ url_for('assistant_options') }}" method="post" class="assistant-card">
                 <input type="hidden" name="id" value="{{ assistant.id }}">
-                <!-- Card with black text and a logo in the middle -->
                 <div class="assistant-block" onclick="this.parentNode.submit();">
                     <div class="assistant-logo"><img src="{{ url_for('static', filename='img/assistant_icon.png') }}" alt="Assistant Icon"></div>
                     <div class="assistant-name">{{ assistant.name }}</div>
                 </div>
             </form>
         {% endfor %}
-    </div>
+    </div> 
 </body>
 </html>

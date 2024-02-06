@@ -323,6 +323,105 @@ code {
     box-sizing: border-box; /* Include padding and border in the width */
 }
 
+#top-controls .button {
+    padding: 10px 15px;
+    font-size: 14px;
+    background: #262626;
+    border: 1px solid #555;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#top-controls .button:hover {
+    border-color: #ff4500;
+    animation: pulseBorder 2s infinite;
+}
+
+
+/* General improvements for readability and consistency */
+h1, .assistant-name {
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Responsive card container for wider screens */
+.assistant-container {
+    display: grid;
+    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+/* Card styling for a clean and modern look */
+.assistant-card {
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center; /* Center children horizontally */
+    background-color: #2e2e2e;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 300px; /* Adjusted height */
+    padding: 20px; /* Add padding to create space inside the card */
+    box-sizing: border-box; /* Include padding in the box model */
+}
+
+
+.assistant-card:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.assistant-logo img {
+    max-width: 100%; /* Ensure logo fits within the padding */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Space between logo and name */
+}
+
+.assistant-name {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px; /* Space above the assistant name if needed */
+}
+
+.dashboard-container {
+    text-align: center; /* Center inline elements and text within the container */
+}
+
+.dashboard-container h1 {
+    margin-bottom: 20px; /* Adds space between the heading and the button */
+}
+
+.navigation-button {
+    background-color: #0057b7; /* Example background color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Padding around text and icon */
+    border: none; /* Remove border */
+    cursor: pointer; /* Cursor as pointer */
+    margin: 20px auto; /* Apply automatic horizontal margins to center the block-level element, with added vertical margin for spacing */
+    display: inline-block; /* Make the button an inline-block element to respond to text-align property */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline on text */
+}
+
+.button-logo {
+    vertical-align: middle; /* Align the icon vertically with the text */
+    margin-right: 8px; /* Adjust spacing between the icon and the text */
+    width: 24px; /* Icon width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.navigation-button span {
+    display: inline-block;
+    vertical-align: middle; /* Align the text vertically */
+    /* Additional styling as needed */
+}
+
+
 /* Adjustments for mobile screens */
 @media (max-width: 600px) {
     /* Ensure there's no horizontal overflow on smaller screens */
@@ -395,69 +494,9 @@ code {
         height: 60vh; /* Use viewport height (vh) to make the chat taller */
         /* You can adjust the value to find the height that works best for your design */
     }
+     /* Adjust grid for mobile to have two columns */
+    .assistant-container {
+        grid-template-columns: repeat(2, 1fr); /* Create two columns on mobile */
+        gap: 10px; /* You might want to adjust the gap for smaller screens */
+    }
 }
-
-#top-controls .button {
-    padding: 10px 15px;
-    font-size: 14px;
-    background: #262626;
-    border: 1px solid #555;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#top-controls .button:hover {
-    border-color: #ff4500;
-    animation: pulseBorder 2s infinite;
-}
-
-
-/* General improvements for readability and consistency */
-h1, .assistant-name {
-    text-align: center;
-    color: #ffffff;
-}
-
-/* Responsive card container */
-.assistant-container {
-    display: grid;
-    padding: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
-    gap: 20px;
-}
-
-/* Card styling for a clean and modern look */
-.assistant-card {
-    display: flex; /* Use flexbox for alignment */
-    flex-direction: column; /* Stack children vertically */
-    justify-content: center; /* Center children vertically */
-    align-items: center; /* Center children horizontally */
-    background-color: #2e2e2e;
-    color: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    min-height: 300px; /* Adjusted height */
-    padding: 20px; /* Add padding to create space inside the card */
-    box-sizing: border-box; /* Include padding in the box model */
-}
-
-
-.assistant-card:hover {
-    transform: translateY(-5px); /* Slight lift effect on hover */
-}
-
-.assistant-logo img {
-    max-width: 100%; /* Ensure logo fits within the padding */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 20px; /* Space between logo and name */
-}
-
-.assistant-name {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px; /* Space above the assistant name if needed */
-}
-
