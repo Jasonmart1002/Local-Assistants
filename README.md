@@ -1,78 +1,82 @@
-# Assistants Application
+## Flask OpenAI Assistant App (with Markup)
 
-## Overview
-This project is a web application built with Flask, integrating OpenAI's GPT-based assistants. It allows users to interact with a variety of AI assistants through a user-friendly interface. The application supports dynamic assistant selection, threaded conversations, and markdown rendering for AI responses.
+**Overview:**
 
-## Features
-- **Dynamic Assistant Selection**: Choose from your own AI assistants created in OpenAI.
-- **Interactive Chat Interface**: Engage in conversations with chosen AI assistants.
-- **Thread Management**: Organize conversations in separate threads.
-- **Markdown Rendering**: Enhanced readability of AI responses.
-- **Code Copy Functionality**: Easily copy code snippets from responses.
+This Flask web application allows users to interact with OpenAI's AI assistants, featuring:
 
-## Installation
+* User registration and login
+* Admin controls for user and assistant management
+* Dynamic chat interface powered by OpenAI's API
+* Secure configuration with environment variables
 
-### Prerequisites
-- Python 3.x
-- pip
-- Virtual Environment (recommended)
+**Features:**
 
-### Setup
-1. **Clone the Repository**
-   ```sh
-   git clone https://github.com/calvincs/Local-Assistants
-   cd Local-Assistants
+* **User management:** Register, login, and manage account information.
+* **Admin dashboard:** Control user access, create, edit, and remove assistants.
+* **AI assistant interaction:** Choose an assistant and chat through a dynamic interface.
+* **Environment variable security:** Store sensitive information securely.
+
+**Requirements:**
+
+* Python 3.6+
+* Flask
+* Flask-Session
+* Flask-SQLAlchemy
+* Flask-Migrate
+* OpenAI Python client
+* Werkzeug (security utilities)
+* markdown2 (Markdown support)
+* MarkupSafe (escaping)
+* python-dotenv (environment variables)
+* BeautifulSoup (HTML parsing)
+
+**Installation:**
+
+1. Clone the repository.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Create a `.env` file (see "Configuration" below).
+
+**Configuration:**
+
+1. Create `.env` file in the root directory:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+SECRET_KEY=your_flask_secret_key_here
+```
+
+2. Replace placeholders with your actual OpenAI API key and a secret key.
+
+**Database Setup:**
+
+1. Initialize the database:
+
+   ```
+   flask db init
+   flask db migrate -m "Initial migration."
+   flask db upgrade
    ```
 
-2. **Configure the `run.sh` Script**
-   Edit the `run.sh` script to set your `OPENAI_API_KEY` and a `SECRET_KEY` for the Flask session store.
+**Running the Application:**
 
-3. **Create and Activate a Virtual Environment** (Optional)
-   ```sh
-   python3 -m venv local-agents-venv
-   source local-agents-venv/bin/activate
-   ```
+1. Run: `python app.py`
+2. Access at: `http://127.0.0.1:5000/`
 
-   You will then need to install the dependencies in the virtual environment:
-   ```sh
-    pip install -r requirements.txt
-    ```
+**Usage:**
 
-    Then run the openai migration script:
-    ```sh
-    openai migrate
-    ```
+* Register: `http://127.0.0.1:5000/register`
+* Login: `http://127.0.0.1:5000/login`
+* Admin dashboard: Accessible to authorized users.
+* Choose an AI assistant and chat through the interface.
 
-    Export the OPENAI_API_KEY and SECRET_KEY environment variables:
-    ```sh
-    export OPENAI_API_KEY=[Your OpenAI API Key]
-    export SECRET_KEY=[Your Secret Key]
-    ```
+**Contributing:**
 
+Fork the repository and submit pull requests!
 
-4. **Run the Application**
-   ```sh
-   ./run.sh
-   ```
-   This script will install the necessary dependencies and start the Flask server.
+**Additional Notes:**
 
-   You will need to chmod the script to make it executable:
-   ```sh
-    chmod +x run.sh
-    ```
+* This readme is now formatted with markdown for better readability.
+* Consider adding links to relevant documentation and resources.
+* Tailor the readme to your specific project details and audience.
 
-## Usage
-After starting the server, visit `http://localhost:5000` to use the application. 
-
-- **Assistant Selection**: You should have created AI assistants associated with your OpenAI API key. Select one from the dropdown menu.
-- **Conversing with Assistants**: Type your message and send.
-- **Clearing the Chat**: Use the 🧽 Clear Chat button for a new conversation thread.
-
-## Manual Setup
-If you prefer to set up the environment manually, you can follow the steps outlined in the `run.sh` script.
-
-## Contributing
-Contributions are welcome. Please fork the repo and create a pull request, or open an issue with the tag "enhancement".
-
-## License
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+I hope this helps! Let me know if you have any other questions.
